@@ -1,0 +1,47 @@
+
+<html>
+
+<script src="https://d3js.org/d3.v4.min.js"></script>
+
+<style>
+
+    svg {
+        border: 1px solid black;
+    }
+</style>
+
+<svg width=800 height=400></svg>
+
+<script>
+
+    let svg = d3.select('svg'),
+        width = +svg.attr('width'),
+        height = +svg.attr('height');
+
+    let rad = 50;
+
+    let data = ['blue', 'red', 'green'];
+
+    svg.selectAll('circle')
+        .data(data)
+      .enter()
+        .append('circle')
+        .attr('cx', rad)
+        .attr('cy', (d,i) => (i+.5)*height/data.length)
+        .attr('r', 10)
+        .attr('fill', d=>d)
+        .style('stroke', 'black')
+        .style('stroke-width', (d, i) => 2*i)
+        .transition()
+//        .delay(1000)
+        .duration(2000)
+        .ease(d3.easeBounce)
+        .attr('cx', (d,i) => i*width/data.length)
+        .attr('fill', 'red')
+        // .transition()
+        // .attr('cy', height-rad)
+        ;
+
+</script>
+
+</html>

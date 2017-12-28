@@ -1,0 +1,120 @@
+
+Topics
+
+    Overview of Project
+        What are we doing?
+        Goals of POC
+            Reduce unknowns
+            Improve accuracy of Production Stories estimates
+            Identify and isolate tricky spots
+
+        Review of Existing Reports
+            wac/irc
+            Web Display (live) vs. Rrint Display (Zeplin)
+            Report Architecture
+                scent-client
+                tlsp
+                intellify
+
+        Key Technologies
+
+            aws lambda
+                server management
+                scaling / load balancing
+
+            phantomjs
+                headless browser
+                url to pdf
+                (version saga)
+
+            node / express
+                webserver
+
+            angular
+                code reuse
+
+    Design of current architecture
+
+        Tech Stack
+            scent-client
+            tlsp
+            lambda
+            lambda-server
+
+        Communication Sequencing
+            Signed urls
+            data model file
+            print request
+            lambda trigger
+            Lambda-server
+            Phantom
+            client polling
+            download
+
+        POC
+            demo-client
+            demo-server
+            lambda
+            lambda-server
+            gulp serve (debugging)
+                stand alone report render
+
+        < Actual Demo >
+
+    Performance
+        Measurement strategies
+            Worst report ?
+            Under load (requests)
+                lambda reuse
+        Current behaviors / Potential optimization
+            Configure Memory for lambda
+            old timeout
+            phantom start/stop
+                phantom reuse
+
+
+    Build/Releng
+        Today - local / individual
+            gulp build
+            lessc master.less > styles.css
+            npm run zip
+            aws upload-new-lambda-zip
+            gulp serve
+            (node demo-server.js)
+
+        Tomorrow
+            maven
+            associated with dev environment
+            terraforming?
+
+
+    Debugging / Development / Testing Strategies
+        demo-server
+            printed report view
+        local-lambda, or, at least
+        local-phantom
+
+        Unit Test Plan
+
+    Still ToDo
+        Table Breaking
+        Header / Footer Proof
+            2 strategies: Phantom vs roll our own
+
+    Issues/Concerns
+        Phantom not fully modern browser
+            flexbox css support not the same as others ?
+        Phantom hard to debug
+
+    Mitigation Strategies
+        Further isolation of phantom limitations
+        We have the control necessary to work around
+            but that can reduce code-reuse
+        Local Phantom
+
+
+    Next Steps
+        Table Breaking
+        mvn
+        integrate with scent-client
+            on branch

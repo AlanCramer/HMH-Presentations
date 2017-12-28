@@ -1,0 +1,85 @@
+
+
+
+Automate upload of print request
+
+(Background)
+Standalone App - Render the print WAC
+Router -
+Lambda Handler (or function)
+    Starts the local webserver
+    Invokes phantom
+    Parse Print Request
+        Get input model
+        Get output location to feed to phantom
+
+We are thinking 3 Bucket locations, for a total of 6 URIs
+    Model
+    Print Request data
+    PDF output
+    (upload/download each has it's own URI)
+    There is a reason the lambda wants to create some of these
+        PR download URI must be created by Lambda
+
+Model and PrintReq must be fully formed before lambda fires
+    Client is responsible for ensuring that the model is uploaded before
+    uploading PR
+    Can it respond to 200 Request?
+
+Webserver is invoked
+    from lambda
+    "require express"
+    "express.static"
+    "app.listen(<port id>)"
+
+Working Decision:
+    Use the lambda to 'route' to 6 different reports
+
+
+Stories
+
+Postpone 6720, 6442, 6790, 6113
+
+
+(Story 0.5 * 3)
+    Move code to HMH repo
+    How to organize the code
+
+(Story 1d)
+    Make a second report "Standalone Page"
+
+(Story 1d)
+    Make the lambda route to 2 different reports
+
+(Story)
+    Define what is a Print Request (json descriptor)
+
+
+(Story)
+Refactor existing Lambda
+    Code that invokes phantom must handle passing output location
+    Parse the Print Request
+    Get the code from a second model location
+    Change the trigger to only respond to the Print Request
+
+(Story)
+Build a New Test Client (to simulate scent-client)
+    More like a QA script
+    Access the JS S3 bucket location creation
+    Upload static json of Print Requests
+    Poll the PDF location
+    Download the PDF
+
+    Dependent on 6787 (js bucket location creation)
+    Dependent on 6789 (polling refactor/reuse)
+    Dependent on new refactor-lambda story
+
+
+(Story)
+At least investigate using AWS technique for reusing webserver
+    https://aws.amazon.com/blogs/compute/going-serverless-migrating-an-express-application-to-amazon-api-gateway-and-aws-lambda/
+
+
+(Story)
+Refactor scent-client code for reuse
+    Make separate repo

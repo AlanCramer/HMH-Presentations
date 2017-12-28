@@ -1,0 +1,95 @@
+<html>
+
+<script src="https://d3js.org/d3.v4.min.js"></script>
+
+<style>
+
+    svg {
+        border: 1px solid black;
+    }
+
+    path {
+        fill: none;
+        stroke: black;
+        stroke-width: 4px;
+    }
+
+    .wire {
+        fill: none;
+        stroke: orange;
+        stroke-width: 4px;
+    }
+
+    .cursor {
+        fill: blue;
+    }
+
+    .meas circle {
+        fill:none;
+        stroke: grey;
+        stroke-width: 2px;
+    }
+    .meas text {
+        text-anchor: middle;
+    }
+    .meas line {
+        stroke: grey;
+        stroke-width: 2px;
+    }
+
+
+</style>
+
+<svg width=800 height=400></svg>
+
+<script>
+
+    let svg = d3.select('svg'),
+        margin = { top: 0, right:0, bottom:0, left: 0},
+        width = +svg.attr('width') - margin.left -margin.right,
+        height = +svg.attr('height') - margin.bottom -margin.top;
+        // svgg = svg.append('g')
+        //     .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
+    let ptCt = 10;
+    let data = d3.range(ptCt).map(i => [Math.random() * width, Math.random() * height]) ;
+
+    svg.selectAll('circle')
+        .data(data)
+        .enter()
+        .append('circle')
+        .attr('cx', d=>d[0])
+        .attr('cy', d=>d[1])
+        .attr('r', 0)
+        .attr('fill', 'blue')
+        .transition()
+        .duration(1000)
+        .delay((d, i) => i*1000)
+        .ease(d3.easeBounce)
+        .attr('r', 8)
+        ;
+
+    var voronoi = d3.voronoi()
+        .extent([[-1, -1], [width + 1, height + 1]]);
+
+    let polys = voronoi.polygons(data);
+
+    var polygon = svg.append("g")
+        .attr("class", "polygons")
+      .selectAll("path")
+      .data(polys)
+      .enter().append("path")
+        .attr('opacity', 0)
+        .call(redrawPolygon);
+
+    svg.on('click', function() {
+        d3.selectAll('path').transition().duration(2000).attr('opacity', 1)
+    });
+
+    function redrawPolygon(polygon) {
+      polygon
+          .attr("d", function(d) { return d ? "M" + d.join("L") + "Z" : null; });
+    }
+
+</script>
+</html>

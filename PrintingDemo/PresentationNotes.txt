@@ -1,0 +1,80 @@
+
+
+What are we doing
+
+  Service to Print Reports - Well, actually, PDF generation
+
+  Key Tech Layers
+
+    AWS Lambda
+
+        Summary: Triggering Events cause Lambda code to fire
+
+        Provides
+            Server Scaling
+            Demand processing (load balancing)
+            Replication
+
+    Phantomjs
+
+        Tool for Html to PDF
+        Headless browser
+        Wraps Qt's WebKit
+        url is rendered
+        Little quirky, but seems to be adequate
+
+    Scent-Client
+    TLSP
+    AWS CLI
+
+  Workflow:
+
+    Client activates
+
+
+
+To Show:
+
+    < h503 demo > for setting context
+
+    Upload a Lambda
+        Is there an aws cmd line for this?
+        <Chuck to find>
+        <Chuck>
+            Teach Lambda to read PR
+        </Chuck>
+
+    Standalone Client Application for testing
+
+<Dick>
+        credentials in local file (csv?)
+
+        start local sa-client webserver
+            ('gulp standalone-client <credentials.csv>')
+
+        User Select Report
+        < grab model from h503 and save >
+        User Select Model
+
+
+        by SAClient
+            Get Signed URLs
+                getAllSignedURLs()
+</Dick>
+            Upload Model()
+
+            Create PR()
+            Upload PR()
+                report id
+                model file url download
+                signed url upload pdf
+                signed url for download pdf
+
+            Render Printed Report in Browser
+
+            Poll for PDF  -
+            <try to down load>
+            Download
+
+
+Open Issues

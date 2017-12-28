@@ -1,0 +1,51 @@
+
+HMTL
+    html tag
+    h1 tag
+    script tag
+        src
+    head tag
+    body tag
+
+SVG
+    width, height attr
+    rect tag
+        x, y, width, height attr
+    circle tag
+        cx, cy, r attr
+    group tag <g>
+        transform attr
+            translate(x, y)
+            rotate(deg)
+            scale(factor)
+        nest-able
+
+CSS
+    type selection
+    class selection
+    id selection
+
+JS
+    var
+    array
+    function calls
+
+
+D3
+
+    select()
+    selectAll()
+    append()
+    text()
+    attr()
+    style()
+    on()
+        click
+        mouseover
+        mouseout
+    margin idea
+    scales
+    axes
+    transition()
+        duration()
+        delay()

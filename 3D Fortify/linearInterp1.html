@@ -1,0 +1,199 @@
+<html>
+
+<script src="https://d3js.org/d3.v4.min.js"></script>
+
+<style>
+
+    svg {
+        border: 1px solid black;
+    }
+
+    path {
+        fill: none;
+        stroke: black;
+        stroke-width: 4px;
+    }
+
+    .wire {
+        fill: none;
+        stroke: orange;
+        stroke-width: 4px;
+    }
+
+    .cursor {
+        fill: blue;
+    }
+
+    .meas circle {
+        fill:none;
+        stroke: grey;
+        stroke-width: 2px;
+    }
+    .meas text {
+        text-anchor: middle;
+    }
+    .meas line {
+        stroke: grey;
+        stroke-width: 2px;
+    }
+
+
+</style>
+
+<svg width=800 height=800></svg>
+
+<script>
+
+    let svg = d3.select('svg'),
+        margin = { top: 100, right:100, bottom:20, left: 100};
+        width = +svg.attr('width') - margin.left -margin.right;
+        height = +svg.attr('height') - margin.bottom -margin.top;
+        svgg = svg.append('g')
+            .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
+    let cursor = svgg.append('circle')
+        .attr('class', 'cursor')
+        .attr('cx', 0)
+        .attr('cy', 0)
+        .attr('r', 0);
+
+    let wire = svgg.append('line')
+        .attr('class', 'wire')
+        .attr('x1', 0)
+        .attr('y1', 0)
+        .attr('x2', 0)
+        .attr('y2', 0);
+
+    let measData = [[50, 10], [100, 35], [250, 20]];
+
+    let meas = svgg.selectAll('.meas')
+        .data(measData)
+        .enter()
+        .append('g')
+        .classed('meas', true)
+        .attr('opacity', '0');
+
+    let measDist = -20;
+    meas.append('text')
+        .attr('x', d=>d[0])
+        .attr('y', measDist*1.4)
+        .text(d=>d[1]);
+
+    let measCircRad = 15; // font size
+    meas.append('circle')
+        .attr('cx', d=>d[0])
+        .attr('cy', measDist-measCircRad)
+        .attr('r', measCircRad);
+
+    meas.append('line')
+        .attr('x1', d=>d[0])
+        .attr('y1', d=>measDist)
+        .attr('x2', d=>d[0])
+        .attr('y2', d=>0)
+        ;
+
+    let pathData = [ [0,measData[0][1]] ].concat(measData);
+    pathData.push([400, measData[measData.length-1][1]]);
+    let stepPathGen = d3.line().curve(d3.curveStep).y(d => 100-d[1]);
+    let path = svgg.append('path')
+        .classed('step-path', true)
+        .attr('d', stepPathGen(pathData))
+        .attr('opacity', 0);
+
+    let states = ['start', 'showPt', 'showLine', 'showStep'];
+    let curState = 0;
+
+    let showCursor  = function(cursor) {
+
+        d3.select('.cursor')
+            .transition()
+            .duration(2000)
+            .ease(d3.easeBounce)
+            .attr('r', 20);
+    }
+
+    let hideCursor  = function(cursor) {
+
+        d3.select('.cursor')
+            .transition()
+            .duration(2000)
+            .attr('r', 0);
+    }
+
+    let drawLine  = function() {
+
+        let t = d3.transition()
+            .duration(2000)
+            .ease(d3.easeLinear);
+
+        let destX = 400;
+
+        let cursor = d3.select('.cursor')
+            .transition(t)
+            .attr('cx', destX)
+            .transition()
+            .duration(750)
+            .attr('r', 0);
+
+        d3.select('.wire')
+            .transition(t)
+            .attr('x2', destX);
+
+    }
+
+    let drawMeasurements = function() {
+
+        let t = d3.transition()
+            .duration(2000)
+            .ease(d3.easeLinear);
+
+        d3.selectAll('.meas')
+            .transition(t)
+            .attr('opacity', 1);
+    }
+
+    let drawStep = function() {
+
+        let t = d3.transition()
+            .duration(2000)
+            .ease(d3.easeLinear);
+
+        d3.selectAll('.step-path')
+            .transition(t)
+            .attr('opacity', 1);
+    }
+
+
+    let activateState = function (state) {
+
+        if (state === 0) {
+            showCursor();
+        }
+
+        if (state === 1) {
+            drawLine();
+        }
+
+        if (state === 2) {
+            drawMeasurements();
+        }
+
+        if (state === 3) {
+            drawStep();
+        }
+    }
+
+    let nextState = function() {
+
+        activateState(curState);
+
+        curState = (curState + 1) % states.length;
+    }
+
+    d3.select('body')
+        .on('click', e => nextState());
+
+
+
+</script>
+</html>

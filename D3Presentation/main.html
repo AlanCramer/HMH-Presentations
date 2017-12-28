@@ -1,0 +1,98 @@
+
+<html>
+
+<head>
+
+<script src="https://d3js.org/d3.v4.min.js"></script>
+
+<style>
+    svg {
+        border: 1px solid black;
+    }
+
+    .blue-thing {
+        fill: blue;
+    }
+
+    .red-thing{
+        fill: red;
+    }
+
+    .outline {
+        fill: none;
+        stroke: #555555;
+        stroke-width: 2px;
+    }
+
+    .moving-dot {
+        fill: #ffff00;
+        stroke: black;
+        stroke-width: 2px;
+    }
+
+</style>
+
+</head>
+
+
+<body>
+<h1> Hello World. </h1>
+
+<svg id='the-chart' width=400 height=400>
+</svg>
+
+<script>
+
+    //var mydata = [5, 12, 45, 4, 5, 12, 17, 4, 5, 12, 17, 4, 5, 12, 17, 4];
+
+    var svg = d3.select('#the-chart');
+    var margin = { top: 20, right:20, bottom:20, left: 20};
+    var width = +svg.attr('width') - margin.left -margin.right;
+    var height = +svg.attr('height') - margin.bottom -margin.top;
+    var g = svg.append('g')
+        .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
+    var theRange = 2;
+    var myx = [-theRange, theRange],
+        myy = [-theRange, theRange];
+
+    var xscale = d3.scaleLinear()
+        .domain(myx)
+        .range([0, width]);
+
+    var yscale = d3.scaleLinear()
+        .domain(myy)
+        .range([height, 0]);
+
+    var tickCt = theRange * 2;
+    g.append('g')
+        .call(d3.axisBottom(xscale).ticks(tickCt))
+        .attr('transform', 'translate(0, ' + height/2 +')');
+
+    g.append('g')
+        .call(d3.axisLeft(yscale).ticks(tickCt))
+        .attr('transform', 'translate(' + width/2 + ', 0)');
+
+    g.append('circle')
+        .attr('class', 'outline')
+        .attr('stroke-dasharray', '3, 1')
+        .attr('cx', xscale(0))
+        .attr('cy', yscale(0))
+        .attr('r', xscale(1) - xscale(0));
+
+    var mdot = g.append('circle')
+        .attr('class', 'moving-dot')
+        .attr('cx', xscale(1))
+        .attr('cy', yscale(0))
+        .attr('r', '10px');
+
+    mdot.transition().duration(6000)
+        .attr('cx', xscale(0))
+        .attr('cy', xscale(1))
+        .attr('r', '10px');
+
+
+</script>
+
+</body>
+</html>

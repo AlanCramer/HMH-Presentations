@@ -1,0 +1,102 @@
+<html>
+
+
+<head>
+
+<script src="https://d3js.org/d3.v4.min.js"></script>
+
+    <style>
+    </style>
+</head>
+
+
+<body>
+Trying stuff.
+
+
+<script>
+
+    function combineArrays(a1, a2, s1, s2) {
+        var res = [];
+        a1.forEach(function(a1i) {
+            a2.forEach(function(a2i) {
+                var t = {};
+                t[s1] = a1i;
+                t[s2] = a2i;
+                res.push(t);
+            })
+        })
+        return res;
+    }
+
+    function dealAll(deck, ct) {
+        for (var i=0; i < ct; ++i) {
+            players.forEach(function(p) {
+                p.hand.push(deck.pop());
+            })
+        }
+    }
+
+    // https://bost.ocks.org/mike/shuffle/
+    function shuffle(array) {
+        var m = array.length, t, i;
+
+        // While there remain elements to shuffle…
+        while (m) {
+
+            // Pick a remaining element…
+            i = Math.floor(Math.random() * m--);
+
+            // And swap it with the current element.
+            t = array[m];
+            array[m] = array[i];
+            array[i] = t;
+        }
+
+        return array;
+    }
+    function printCard(str, c) {
+        return str + c.rank + c.suit + ' ';
+    }
+
+    var suits = "CDHS".split('');
+    var ranks = "23456789TJQKA".split('');
+    var deck = combineArrays(suits, ranks, 'suit', 'rank');
+    shuffle(deck);
+
+    var playerCt = 4;
+    var players = d3.range(playerCt).map(function(d, i) { return  {
+        name: 'bub' + d,
+        hand: [] } ;}
+    );
+
+    dealAll(deck, 5);
+
+    // start drawing
+    var body = d3.select('body');
+
+    // var str = players[0].hand.forEach(function(d) {
+    //     return this + d.rank + d.suit + ' ';}, '');
+    // body.append('p').text(str);
+
+    body.selectAll('.player')
+        .data(players)
+      .enter()
+        .append('p')
+        .text(function(d) {
+            var handStr = '';
+            return d.name + ' : ' + d.hand.reduce(printCard, ''); })
+        // .append('p')
+        // .text(deck.forEach(printCard))
+        ;
+
+    d3.xml('alan_deck.svg').mimeType("image/svg+xml").get(function(err, xml) {
+        if (err) throw err;
+        document.body.appendChild(xml.documentElement);
+
+    });
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,37 @@
+<html>
+
+<head>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+</head>
+
+<body>
+Hello World.
+<svg id='the-svg' width =800 height=300></svg>
+
+<script>
+
+var cardImgs = [];
+d3.xml("alan_deck.svg").mimeType("image/svg+xml").get(function(error, xml) {
+    if (error) throw error;
+//  document.body.appendChild(xml.documentElement);
+
+    var svgxml = xml.childNodes[1];
+    var kids = svgxml.childNodes;
+
+    for (var i=0,len=kids.length;i<len;++i){
+        var kid = kids[i];
+
+        if (kid.nodeType === 1)  {// an element
+            cardImgs.push(kid);
+        }
+    }
+    console.log(cardImgs);
+
+    document.getElementById("the-svg").appendChild(cardImgs[7]);
+});
+</script>
+
+</body>
+
+
+</html>
